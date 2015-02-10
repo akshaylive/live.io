@@ -1,0 +1,28 @@
+{
+  "name": "live.io",
+  "version": "0.0.1",
+  "description": "LivE.IO combines the routing capabilities of Express onto Socket.IO. This coupled with socket authentication makes the framework very flexible.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akshaylive/live.io.git"
+  },
+  "keywords": [
+    "node.js",
+    "routing",
+    "socket",
+    "express",
+    "socket.io",
+    "passport",
+    "authentication"
+  ],
+  "author": "Akshaya Shanbhogue <akshay.live@gmail.com> (http://www-scf.usc.edu/~shanbhog/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akshaylive/live.io/issues"
+  },
+  "homepage": "https://github.com/akshaylive/live.io"
+}
