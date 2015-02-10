@@ -8,5 +8,5 @@ require("socket.io");
 require("passport.socketio");
 
 module.exports = {
-    
+
 }
