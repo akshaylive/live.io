@@ -4,7 +4,7 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         jshint: {
-            files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+            files: ['Gruntfile.js', 'src/**/*.js', 'tests/**/*.js', 'index.js'],
             options: {
                 globals: {
                     jQuery: true
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-simple-mocha');
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('default', ['jshint', 'watch']);
     grunt.registerTask('test', [
         'simplemocha'
     ]);
