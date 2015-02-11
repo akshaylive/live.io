@@ -5,22 +5,24 @@ Live.io combines the power of the new Express 4.0, socket.io and passport! Empow
 
 ## Installation
 
-  npm install live.io --save
+    npm install live.io --save
 
 ## Usage
 
   replace require('express') with require('live.io')
 
   Add your socket route using the socket method.
-  app.route('/').socket(function(req, res){
-    // req.body contains socket data
-    // res.emit can emit data to socket.
-    // res.json is a helper method to return json data.
-  });
+
+    app.route('/').socket(function(req, res){
+      // req.body contains socket data
+      // res.emit can emit data to socket.
+      // res.json is a helper method to return json data. This will be implemented in the next release.
+    });
+
 
 ## Tests
 
-  grunt test
+    grunt test
 
 ## Contributing
 
