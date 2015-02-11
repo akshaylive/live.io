@@ -1,6 +1,6 @@
 {
   "name": "live.io",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "LivE.IO combines the routing capabilities of Express onto Socket.IO. This coupled with socket authentication makes the framework very flexible.",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,8 @@
     "express-session": "^1.10.2",
     "passport": "^0.2.1",
     "passport.socketio": "^3.4.1",
-    "socket.io": "^1.3.3"
+    "socket.io": "^1.3.3",
+    "socket.io-events": "^0.4.6"
   },
   "devDependencies": {
     "chai": "^1.10.0",
