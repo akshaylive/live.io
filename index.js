@@ -102,7 +102,7 @@ module.exports = function(options){
             req.body = msg;
 
             exp.handle(req, req.res);
-            next()
+            next();
         });
         io.use(router);
 
