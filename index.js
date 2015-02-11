@@ -15,7 +15,7 @@ else {
         'put',
         'head',
         'delete',
-        'socket', // ADDED NEW METHOD "socket"
+        'socket', // ADDED NEW METHOD 'socket'
         'options',
         'trace',
         'copy',
@@ -41,50 +41,73 @@ else {
 }
 
 
-express = require("express");
-socketio = require("socket.io");
-passportSocketIo = require("passport.socketio");
+var express = require('express'),
+    socketio = require('socket.io'),
+    passport = require('passport'),
+    passportSocketIo = require('passport.socketio'),
+    session = require('express-session'),
+    cookieParser = require('cookie-parser');
 
-module.exports = function(){
+
+module.exports = function(options){
+    var options = options || {}
+        , key = options.name || options.key || 'connect.sid'
+        , store = options.store || new session.MemoryStore
+        , liveCookieParser = options.cookieParser || cookieParser
+        , sessionSecret = options.sessionSecret || '';
+
     var exp = express();
+
+    // Express MongoDB session storage
+    exp.use(session({
+        saveUninitialized: true,
+        resave: true,
+        secret: sessionSecret,
+        store: store
+    }));
+
+    // use passport session
+    exp.use(passport.initialize());
+    exp.use(passport.session());
 
     exp.listen = function(port){
         var server = http.createServer(this);
         var io = socketio.listen(server);
 
-        /*
         io.use(passportSocketIo.authorize({
-            cookieParser: cookieParser,
-            key:         'connect.sid',       // the name of the cookie where express/connect stores its session_id
-            secret:      config.sessionSecret,    // the session_secret to parse the cookie
-            store:       sessionStore,        // we NEED to use a sessionstore. no memorystore please
+            cookieParser: liveCookieParser,
+            key:         key,       // the name of the cookie where express/connect stores its session_id
+            secret:      sessionSecret,    // the session_secret to parse the cookie
+            store:       store,        // we NEED to use a sessionstore. no memorystore please
             success:     onAuthorizeSuccess,  // *optional* callback on success - read more below
             fail:        onAuthorizeFail     // *optional* callback on fail/error - read more below
         }));
-        */
+
         function onAuthorizeSuccess(data, accept){
-            console.log('successful connection to socket.io'+data);
             accept(null, true);
         }
         function onAuthorizeFail(data, message, error, accept){
             if(error)
                 throw new Error(message);
-            console.log('failed connection to socket.io:', message);
             accept(null, false);
         }
-        io.on('connection', function(socket){
-            console.log('CONNECTED');
-            console.log(socket.handshake);
-            // on message, need to call app.handle ; req.url and req. method needs to be set.
-            socket.on('request', function(data){
-                console.log(data);
-            });
+
+        var router = require('socket.io-events')();
+        router.on('*', function (sock, args, next) {
+            var name = args.shift(), msg = args.shift();
+            var req = sock.sock.client.request;
+
+            req.method = "socket";
+            req.url = name;
+            req.body = msg;
+
+            exp.handle(req, req.res);
+            next()
         });
+        io.use(router);
 
         this.set('socketio', io);
         server.listen(port);
-
-        console.log("listening");
     };
     exp.server = exp;
     return exp;
