@@ -109,6 +109,6 @@ module.exports = function(options){
         this.set('socketio', io);
         server.listen(port);
     };
-    exp.server = exp;
+    exp.set('server', exp);
     return exp;
 };
