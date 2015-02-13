@@ -99,6 +99,7 @@ module.exports = function(options){
 
             req.method = "socket";
             req.url = name;
+            req.app = app;
             req.body = msg;
 
             exp.handle(req, req.res);
@@ -111,6 +112,7 @@ module.exports = function(options){
 
             req.method = 'socket';
             req.url = 'connect';
+            req.app = app;
 
             exp.handle(req, req.res);
 
@@ -119,6 +121,7 @@ module.exports = function(options){
 
                 req.method = 'socket';
                 req.url = 'disconnect';
+                req.app = app;
 
                 exp.handle(req, req.res);
             });
