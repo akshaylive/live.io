@@ -106,6 +106,24 @@ module.exports = function(options){
         });
         io.use(router);
 
+        io.sockets.on('connection', function (socket) {
+            var req = socket.client.request;
+
+            req.method = 'socket';
+            req.url = 'connect';
+
+            exp.handle(req, req.res);
+
+            socket.on('disconnect', function(){
+                var req = socket.client.request;
+
+                req.method = 'socket';
+                req.url = 'disconnect';
+
+                exp.handle(req, req.res);
+            });
+        });
+
         this.set('socketio', io);
         server.listen(port);
     };

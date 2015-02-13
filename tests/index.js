@@ -45,18 +45,55 @@ describe('#check if socket routing works', function() {
         });
         calledCount.should.equal(4);
     });
+
     var data = {data:"testDataLoremIpsumStuff"};
     it('should connect to passport-socketio seamlessly', function(done){
-        var socket = require('socket.io-client')('http://localhost:3000/');
+        var rdata;
         app.route('customMessage').socket(function(req, res){
-            req.body.should.eql(data);
-            done();
+            rdata = req.body;
         });
+
+        var socket = require('socket.io-client')('http://localhost:3000/');
         socket.on('connect', function(){
             socket.emit('customMessage', data);
+            socket.io.disconnect();
         });
+        socket.on('disconnect', function() {
+            rdata.should.eql(data);
+            socket._callbacks = {};
+            done();
+        });
+        socket.io.connect();
         this.timeout(1000);
     });
+
+    it('should fire connect and disconnect callbacks', function(done){
+        var calledCount = 0;
+        app.route('connect').socket(function(req, res, next){
+            calledCount++;
+            next();
+        }, function(req, res, next){
+            calledCount++;
+            next();
+        });
+
+        app.route('disconnect').socket(function(req, res, next){
+            calledCount++;
+            next();
+        }, function(req, res, next){
+            calledCount++;
+            calledCount.should.equal(4);
+            done();
+        });
+        var socket = require('socket.io-client')('http://localhost:3000/');
+        socket.on('connect', function(e){
+            socket.io.disconnect();
+        });
+        socket.io.connect();
+        this.timeout(1000);
+    });
+
+
     // TODO when route starts with / it causes header problem.
     // TODO authentication checks
 });

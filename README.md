@@ -19,7 +19,16 @@ Live.io combines the power of the new Express 4.0, socket.io and passport! Empow
       // res.json is a helper method to return json data. This will be implemented in the next release.
     });
 
+## Events
+  Special events include 'connect' and 'disconnect' while routing.
+  
+    app.route('connect').socket(function(req, res){
+        // do stuff on connection.
+    });
 
+    app.route('disconnect').socket(function(req, res){
+       // do stuff on connection.
+    });
 ## Tests
 
     grunt test
