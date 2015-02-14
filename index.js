@@ -92,14 +92,37 @@ module.exports = function(options){
             accept(null, false);
         }
 
+        function makeRequestResponse(req,res){
+            req.method = "socket";
+            req.app = exp;
+            req.isAuthenticated = function(){
+                if(req.user && req.user.logged_in!==false)
+                    return true;
+                return false;
+            }
+            res.status = function(stat){
+                // NO-OP/PASS-THROUGH
+                res.status = stat;
+                return res;
+            };
+            res.send = function(a){
+                if(typeof a=="object" && !a.status){
+                    a.status = res.status;
+                }
+                // send data with event "data"
+                res.emit('data', a);
+                return res;
+            }
+            res.json = res.send;
+        }
+
         var router = require('socket.io-events')();
         router.on('*', function (sock, args, next) {
             var name = args.shift(), msg = args.shift();
             var req = sock.sock.client.request;
 
-            req.method = "socket";
+            makeRequestResponse(req,req.res);
             req.url = name;
-            req.app = exp;
             req.body = msg;
 
             exp.handle(req, req.res);
@@ -110,19 +133,14 @@ module.exports = function(options){
         io.sockets.on('connection', function (socket) {
             var req = socket.client.request;
 
-            req.method = 'socket';
+            makeRequestResponse(req,req.res);
             req.url = 'connect';
-            req.app = exp;
-
             exp.handle(req, req.res);
 
             socket.on('disconnect', function(){
                 var req = socket.client.request;
-
-                req.method = 'socket';
+                makeRequestResponse(req,req.res);
                 req.url = 'disconnect';
-                req.app = exp;
-
                 exp.handle(req, req.res);
             });
         });
