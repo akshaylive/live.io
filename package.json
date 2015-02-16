@@ -1,6 +1,6 @@
 {
   "name": "live.io",
-  "version": "0.1.1",
+  "version": "0.2.3",
   "description": "LivE.IO combines the routing capabilities of Express onto Socket.IO. This coupled with socket authentication makes the framework very flexible.",
   "main": "index.js",
   "scripts": {
