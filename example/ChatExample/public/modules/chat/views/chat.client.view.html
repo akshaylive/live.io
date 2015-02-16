@@ -1,0 +1,17 @@
+<section data-ng-controller="ChatController" ng-init="connect()">
+	<div style="height: 100%; width: 100%">
+		<div class="row" ng-repeat="message in messages">
+			<span class="col-xs-3" data-ng-bind="message.user"></span>
+			<span class="col-xs-9" data-ng-bind="message.message"></span>
+		</div>
+		<div class="row" style="visibility: hidden;">
+			<input type="text" class="col-md-12">
+		</div>
+	</div>
+	<div class="row navbar-fixed-bottom">
+		<form ng-submit="sendMessage()">
+			<input type="text" data-ng-model="message" class="col-md-11 col-xs-10">
+			<button type="submit" class="col-md-1 col-xs-2">Send</button>
+		</form>
+	</div>
+</section>
