@@ -121,11 +121,11 @@ module.exports = function(options){
             var name = args.shift(), msg = args.shift();
             var req = sock.sock.client.request;
 
-            makeRequestResponse(req,req.res);
+            makeRequestResponse(req,sock.sock);
             req.url = name;
             req.body = msg;
 
-            exp.handle(req, req.res);
+            exp.handle(req, sock.sock);
             next();
         });
         io.use(router);
