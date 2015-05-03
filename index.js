@@ -133,13 +133,13 @@ module.exports = function(options){
         io.sockets.on('connection', function (socket) {
             var req = socket.client.request;
 
-            makeRequestResponse(req,req.res);
+            makeRequestResponse(req,req.res | socket);
             req.url = 'connect';
             exp.handle(req, req.res);
 
             socket.on('disconnect', function(){
                 var req = socket.client.request;
-                makeRequestResponse(req,req.res);
+                makeRequestResponse(req,req.res | socket);
                 req.url = 'disconnect';
                 exp.handle(req, req.res);
             });
