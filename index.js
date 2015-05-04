@@ -113,6 +113,9 @@ module.exports = function(options){
                 res.emit('data', a);
                 return res;
             }
+            req.setHeader = function(key, val){
+                // TODO
+            }
             res.json = res.send;
         }
 
