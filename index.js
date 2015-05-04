@@ -116,6 +116,9 @@ module.exports = function(options){
             res.setHeader = function(key, val){
                 // TODO
             }
+            res.end = function(body, encoding){
+                // TODO
+            }
             res.json = res.send;
         }
 
