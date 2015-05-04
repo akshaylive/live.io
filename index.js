@@ -119,6 +119,7 @@ module.exports = function(options){
             res.end = function(body, encoding){
                 // TODO
             }
+            res.statusCode = 200;
             res.json = res.send;
         }
 
