@@ -142,13 +142,13 @@ module.exports = function(options){
 
             makeRequestResponse(req,req.res | socket);
             req.url = 'connect';
-            exp.handle(req, req.res);
+            exp.handle(req, req.res | socket);
 
             socket.on('disconnect', function(){
                 var req = socket.client.request;
                 makeRequestResponse(req,req.res | socket);
                 req.url = 'disconnect';
-                exp.handle(req, req.res);
+                exp.handle(req, req.res | socket);
             });
         });
 
