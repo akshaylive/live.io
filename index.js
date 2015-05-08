@@ -3,7 +3,8 @@
  *
  * Created by Akshaya Shanbhogue on 2/10/2015.
  */
-var http = require('http');
+var http = require('http'),
+    https = require('https');
 if(http.METHODS) {
     // TODO - check if socket already exists
     http.METHODS.push('socket');
@@ -39,6 +40,8 @@ else {
         'connect'
     ];
 }
+// COPY to HTTPS!
+https.METHODS = http.METHODS;
 
 
 var express = require('express'),
@@ -54,7 +57,8 @@ module.exports = function(options){
         , key = options.name || options.key || 'connect.sid'
         , store = options.store || new session.MemoryStore
         , liveCookieParser = options.cookieParser || cookieParser
-        , sessionSecret = options.sessionSecret || '';
+        , sessionSecret = options.sessionSecret || ''
+        , secure = options.secure;
 
     var exp = express();
 
@@ -71,7 +75,11 @@ module.exports = function(options){
     exp.use(passport.session());
 
     exp.listen = function(port){
-        var server = http.createServer(this);
+        var server;
+        if(!secure)
+            server = http.createServer(this);
+        else
+            server = https.createServer(secure, this);
         var io = socketio.listen(server);
 
         io.use(passportSocketIo.authorize({
@@ -133,13 +141,13 @@ module.exports = function(options){
         io.sockets.on('connection', function (socket) {
             var req = socket.client.request;
 
-            makeRequestResponse(req,req.res | socket);
+            makeRequestResponse(req,req.res);
             req.url = 'connect';
             exp.handle(req, req.res);
 
             socket.on('disconnect', function(){
                 var req = socket.client.request;
-                makeRequestResponse(req,req.res | socket);
+                makeRequestResponse(req,req.res);
                 req.url = 'disconnect';
                 exp.handle(req, req.res);
             });
