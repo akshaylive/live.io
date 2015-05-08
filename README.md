@@ -15,16 +15,16 @@ Live.io combines the power of the new Express 4.0, socket.io and passport! Empow
   2. store - session store. Defaults to MemoryStore of express-session package.
   3. cookieParser - your custom cookie-parser. Defaults to cookie-parser package.
   4. Secure - If you use https, wss combo, you can pass your https options. If you use secure, socket-io will be secure-only.
-  
+
     var app = live({
-          sessionSecret: sessionSecret,
-          store: sessionStore,
-          cookieParser: cookieParser,
-          secure: {
-            key: privateKey,
-            cert: certificate
-          }
-     });
+      sessionSecret: sessionSecret,
+      store: sessionStore,
+      cookieParser: cookieParser,
+        secure: {
+          key: privateKey,
+          cert: certificate
+        }
+    });
 
   Add your socket route using the socket method.
 
